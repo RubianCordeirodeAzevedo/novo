@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lista Dinâmica com Indicadores</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <label for="quantidade">Quantidade</label>
+            <input type="number" id="quantidade" placeholder="Digite aqui">
+            <div class="indicadores">
+                <button id="obj1" disabled>OBJ1</button>
+                <button id="obj3" disabled>OBJ3</button>
+            </div>
+        </div>
+        <div class="main">
+            <ul id="listaItens">
+                <!-- Os itens gerados dinamicamente aparecerão aqui -->
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        const obj1 = document.getElementById('obj1');
+        const obj3 = document.getElementById('obj3');
+        const listaItens = document.getElementById('listaItens');
+
+        document.getElementById('quantidade').addEventListener('input', function () {
+            const quantidade = parseInt(this.value) || 0;
+            listaItens.innerHTML = ''; // Limpa a lista anterior
+
+            // Cria os itens conforme a quantidade digitada
+            for (let i = 1; i <= quantidade; i++) {
+                const li = document.createElement('li');
+                li.classList.add('item');
+                li.innerHTML = `
+                    <div class="numero-item" id="item-${i}">${i}</div>
+                    <div class="conteudo-item">Item ${i}</div>
+                `;
+                listaItens.appendChild(li);
+            }
+
+            // Habilita os botões se houver mais de 1 item
+            if (quantidade > 0) {
+                obj1.disabled = false;
+                obj3.disabled = false;
+
+                // Define os textos para os botões
+                obj1.textContent = `Ir para 1`;
+                obj3.textContent = `Ir para ${quantidade}`;
+            } else {
+                obj1.disabled = true;
+                obj3.disabled = true;
+            }
+        });
+
+        // Scroll até o primeiro item
+        obj1.addEventListener('click', () => {
+            const firstItem = document.getElementById('item-1');
+            if (firstItem) {
+                firstItem.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+
+        // Scroll até o último item
+        obj3.addEventListener('click', () => {
+            const quantidade = parseInt(document.getElementById('quantidade').value) || 0;
+            const lastItem = document.getElementById(`item-${quantidade}`);
+            if (lastItem) {
+                lastItem.scrollIntoView({ behavior: 'smooth' });
+            }
+        });
+    </script>
+</body>
+</html>
